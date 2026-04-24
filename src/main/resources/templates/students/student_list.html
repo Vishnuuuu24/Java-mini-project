@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Students</title>
+    <link rel="stylesheet" th:href="@{/css/admin_styles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <style>
+        .export-buttons {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+        .export-button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .export-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Search and select courses...",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a th:href="@{/users/admin/dashboard/}" class="navbar-brand">Student Management System</a>
+            <div class="navbar-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="navbar-menu">
+                <a th:href="@{/users/admin/dashboard/}">Dashboard</a>
+                <a th:href="@{/students/}" class="active">Students</a>
+                <a th:href="@{/faculty/faculty_list/}">Faculty</a>
+                <a th:href="@{/courses/}">Courses</a>
+                <a th:href="@{/tasks/}">Tasks</a>
+            </div>
+            <div class="user-info">
+                <a th:href="@{/users/logout/}" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <ul class="messages" th:if="${success != null or error != null}">
+        <li class="success" th:if="${success != null}" th:text="${success}"></li>
+        <li class="error" th:if="${error != null}" th:text="${error}"></li>
+    </ul>
+
+    <h1>Search Student</h1>
+    <div class="search-container">
+        <form method="GET" th:action="@{/students/}" class="search-form">
+            <input type="text" name="q" placeholder="Search students by name, username, or roll number..." th:value="${q}" class="search-input">
+            <button type="submit" class="search-button">Search</button>
+            <a th:if="${q != null and !#strings.isEmpty(q)}" th:href="@{/students/}" class="clear-search">Clear Search</a>
+        </form>
+    </div>
+
+    <div class="student-list-container" th:with="currentUser=${session.currentUserId != null ? @customUserRepository.findById(session.currentUserId).orElse(null) : null}">
+        <h2 th:text="|Students (${total_students} total)|"></h2>
+        <div class="export-buttons" th:if="${currentUser != null and currentUser.role.name() == 'ADMIN'}">
+            <a th:href="@{/students/export/csv/}" class="export-button">Export All Grades as CSV</a>
+            <a th:href="@{/students/export/pdf/}" class="export-button">Export All Grades as PDF</a>
+        </div>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Roll No.</th>
+                <th>Action</th>
+            </tr>
+            <tr th:each="student : ${students}">
+                <td th:text="${student.user.username}"></td>
+                <td th:text="${student.registerNo}"></td>
+                <td>
+                    <a th:href="@{/students/{studentId}/(studentId=${student.id})}" class="manage-link">
+                        Manage
+                    </a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(students)}"><td colspan="3">No students found.</td></tr>
+        </table>
+
+        <div class="view-more-container" th:if="${has_more}">
+            <a th:if="${q != null and !#strings.isEmpty(q)}" th:href="@{/students/(show_all=1,q=${q})}" class="view-more-button">View All Students</a>
+            <a th:if="${q == null or #strings.isEmpty(q)}" th:href="@{/students/(show_all=1)}" class="view-more-button">View All Students</a>
+        </div>
+    </div>
+
+    <div class="creation-form">
+        <h2>Create New Student</h2>
+        <form method="POST" th:action="@{/students/}" th:object="${student_form}">
+            <input type="hidden" name="csrfmiddlewaretoken" th:value="${_csrf.token}">
+
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+            </div>
+
+            <p>
+                <label for="id_user">User:</label>
+                <select id="id_user" th:field="*{userId}">
+                    <option value="">---------</option>
+                    <option th:each="user : ${@customUserRepository.findByRole(T(com.example.stmgt.domain.enums.UserRole).STUDENT)}"
+                            th:value="${user.id}"
+                            th:text="|${user.username} (${user.firstName} ${user.lastName})|"></option>
+                </select>
+            </p>
+
+            <p>
+                <label for="id_register_no">Register No:</label>
+                <input type="text" id="id_register_no" th:field="*{registerNo}">
+            </p>
+
+            <p>
+                <label for="id_department">Department:</label>
+                <input type="text" id="id_department" th:field="*{department}">
+            </p>
+
+            <p>
+                <label for="id_attendance">Attendance:</label>
+                <input type="number" id="id_attendance" th:field="*{attendance}" min="0" max="100" step="0.1">
+            </p>
+
+            <p>
+                <label for="id_level">Level:</label>
+                <select id="id_level" th:field="*{level}">
+                    <option value="UG">Undergraduate</option>
+                    <option value="PG">Graduate</option>
+                </select>
+            </p>
+
+            <p>
+                <label for="id_courses">Courses:</label>
+                <select id="id_courses" class="select2" th:field="*{courseIds}" multiple>
+                    <option th:each="course : ${@courseRepository.findAll()}"
+                            th:value="${course.id}"
+                            th:text="|${course.name} (${course.code})|"></option>
+                </select>
+            </p>
+
+            <button type="submit" name="create_student">Create Student</button>
+        </form>
+    </div>
+
+    <div class="back-link-container">
+        <a th:href="@{/users/admin/dashboard/}" class="back-link">← Back to admin dashboard</a>
+    </div>
+    <script>
+        function toggleMenu() {
+            const menu = document.querySelector('.navbar-menu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

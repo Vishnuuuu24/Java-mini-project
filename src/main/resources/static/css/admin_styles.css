@@ -1,0 +1,1149 @@
+/* Reset and basic styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #fcfcfc 0%, #2575fc 100%);
+  /* background : url('/static/images/login_bg.png') no-repeat center center fixed; */
+  color: #333;
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Welcome Section */
+#welcome {
+  font-size: 20px;
+  color: #000000;
+  margin: 20px 0;
+  font-weight: bold;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #1abc9c;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(42, 174, 148, 0.84);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.navbar-brand {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-menu {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.navbar-menu a {
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+.navbar-menu a:hover {
+    background-color: #16a085;
+}
+
+.navbar-menu a.active {
+    background-color: #16a085;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.logout-btn {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Responsive navbar toggle */
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.navbar-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+    .navbar-toggle {
+        display: flex;
+    }
+    
+    .navbar-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #1abc9c;
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .navbar-menu.active {
+        display: flex;
+    }
+}
+
+/* Main Section - Summary Cards */
+#Summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+#Summary h1,
+#Summary p {
+  display: none;
+}
+
+#Summary::before {
+  content: '';
+  display: none;
+}
+
+#Summary .summary-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+#Summary .summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+#Summary .summary-card h3 {
+  font-size: 18px;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+#Summary .summary-card span {
+  font-size: 24px;
+  color: #34495e;
+  font-weight: bold;
+}
+
+/* Form Sections */
+section h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #10e2c2;
+}
+
+form {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+  transition: transform 0.3s ease;
+}
+
+form:hover {
+  transform: scale(1.01);
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus,
+form select:focus {
+  border-color: #1abc9c;
+  outline: none;
+}
+
+form button {
+  width: max-content;
+  padding: 10px 20px;
+  background-color: #1abc9c;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+form button:hover {
+  background-color: #16a085;
+}
+
+/* Student Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  text-align: left;
+  padding: 12px 15px;
+  font-size: 14px;
+}
+
+table th {
+  background-color: #1abc9c;
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tr:hover {
+  background-color: #e0f7f4;
+}
+
+table a {
+  color: #1abc9c;
+  font-weight: bold;
+  padding: 6px 12px;
+  background-color: #ecfdfb;
+  border: 1px solid #1abc9c;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+table a:hover {
+  background-color: #1abc9c;
+  color: white;
+}
+
+/* Message Alerts */
+.messages {
+  list-style-type: none;
+  margin: 20px 0;
+  padding: 0;
+}
+
+.messages li {
+  background-color: #ecf0f1;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.messages li.success {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.messages li.error {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.messages li.info {
+  background-color: #3498db;
+  color: #fff;
+}
+
+/* Back Link Container */
+.back-link-container {
+    margin: 30px 0;
+    text-align: left;
+}
+
+.back-link {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #1abc9c;
+    color: white;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.back-link:hover {
+    background-color: #16a085;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Student Management Page Styling */
+.manage-student-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.manage-student-container h1 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #1abc9c;
+}
+
+.student-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.student-info p {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 0;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.student-info strong {
+    color: #1abc9c;
+    margin-right: 10px;
+}
+
+/* Enrolled Courses and Grades Sections */
+.manage-student-container h2 {
+    color: #2c3e50;
+    font-size: 20px;
+    margin: 30px 0 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1abc9c;
+}
+
+.manage-student-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.manage-student-container ul li {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.manage-student-container ul li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Grade Form Styling */
+.manage-student-container form {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.manage-student-container form p {
+    margin: 15px 0;
+}
+
+.manage-student-container form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.manage-student-container form select,
+.manage-student-container form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.manage-student-container form select:focus,
+.manage-student-container form input:focus {
+    border-color: #1abc9c;
+    outline: none;
+}
+
+.manage-student-container form button {
+    background-color: #1abc9c;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.manage-student-container form button:hover {
+    background-color: #16a085;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Error Messages */
+.manage-student-container .errorlist {
+    color: #e74c3c;
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+.export-buttons {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+.export-button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+.export-button:hover {
+    background-color: #45a049;
+}
+/* Hide spinner for number input (Chrome, Safari, Edge) */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+/* Hide spinner for Firefox */
+input[type=number] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* Faculty Management Page Styling */
+.manage-faculty-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.manage-faculty-container h1 {
+    color: #2c3e50;
+    font-size: 24px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #1abc9c;
+}
+
+.faculty-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.faculty-info p {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 0;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.faculty-info strong {
+    color: #1abc9c;
+    margin-right: 10px;
+}
+
+/* Faculty Courses Section */
+.manage-faculty-container h2 {
+    color: #2c3e50;
+    font-size: 20px;
+    margin: 30px 0 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1abc9c;
+}
+
+.manage-faculty-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.manage-faculty-container ul li {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.manage-faculty-container ul li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Faculty Form Styling */
+.manage-faculty-container form {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.manage-faculty-container form p {
+    margin: 15px 0;
+}
+
+.manage-faculty-container form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.manage-faculty-container form select,
+.manage-faculty-container form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.manage-faculty-container form select:focus,
+.manage-faculty-container form input:focus {
+    border-color: #1abc9c;
+    outline: none;
+}
+
+.manage-faculty-container form button {
+    background-color: #1abc9c;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.manage-faculty-container form button:hover {
+    background-color: #16a085;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Error Messages */
+.manage-faculty-container .errorlist {
+    color: #e74c3c;
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #Summary {
+      grid-template-columns: 1fr;
+  }
+
+  #profile_menu {
+      justify-content: center;
+  }
+
+  #profile_menu .topmenu a {
+      display: block;
+      margin: 10px 0;
+  }
+
+  form {
+      padding: 20px;
+  }
+
+  table th,
+  table td {
+      font-size: 12px;
+      padding: 10px;
+  }
+
+  table a {
+      font-size: 12px;
+      padding: 5px 10px;
+  }
+
+  .student-info {
+      grid-template-columns: 1fr;
+  }
+  
+  .manage-student-container {
+      padding: 20px;
+  }
+  
+  .manage-student-container h1 {
+      font-size: 20px;
+  }
+
+  .manage-student-container form {
+      padding: 15px;
+  }
+  
+  .manage-student-container ul {
+      grid-template-columns: 1fr;
+  }
+
+  .manage-faculty-container {
+      padding: 20px;
+  }
+  
+  .manage-faculty-container h1 {
+      font-size: 20px;
+  }
+
+  .faculty-info {
+      grid-template-columns: 1fr;
+  }
+  
+  .manage-faculty-container form {
+      padding: 15px;
+  }
+  
+  .manage-faculty-container ul {
+      grid-template-columns: 1fr;
+  }
+}
+
+/* Add these styles to your existing admin_styles.css */
+
+.search-container {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    
+}
+
+.search-button {
+    padding: 10px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+.clear-search {
+    padding: 8px 16px;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.clear-search:hover {
+    background-color: #545b62;
+}
+
+.search-form button, .search-form a {
+    height: 55px; /* make both buttons same height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.student-list-container {
+    margin: 20px 0;
+}
+
+.view-more-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.view-more-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.view-more-button:hover {
+    background-color: #218838;
+}
+
+.manage-link {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #17a2b8;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.manage-link:hover {
+    background-color: #138496;
+}
+
+.course-list {
+    list-style: none;
+    padding: 0;
+}
+
+.course-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    margin: 4px 0;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.remove-course {
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0 8px;
+}
+
+.remove-course:hover {
+    color: #c82333;
+}
+
+.select2-container {
+    margin-bottom: 15px;
+}
+
+.select2-container--default .select2-selection--single {
+    height: 38px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 38px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 36px;
+}
+
+.course-creation-form {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.course-creation-form .form-group {
+    margin-bottom: 15px;
+}
+
+.course-creation-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.course-creation-form input,
+.course-creation-form select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.course-creation-form input:focus,
+.course-creation-form select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.course-creation-form button {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.course-creation-form button:hover {
+    background-color: #218838;
+}
+
+.delete-button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete-button:hover {
+    background-color: #c0392b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.delete-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.delete-container {
+    margin: 20px 0;
+    text-align: right;
+}
+
+/* Export Buttons */
+.export-buttons {
+    margin: 20px 0;
+    display: flex;
+    gap: 10px;
+}
+
+.export-button {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.export-button:hover {
+    background-color: #45a049;
+}
+
+.course-creation-form .errorlist {
+    color: #dc3545;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    font-size: 0.875rem;
+}
+
+.course-creation-form .errorlist li {
+    margin: 2px 0;
+}
+
+.course-creation-form input.error,
+.course-creation-form select.error {
+    border-color: #dc3545;
+}
+
+.course-creation-form input.error:focus,
+.course-creation-form select.error:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.editable-field {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.editable-field:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.update-button {
+    background-color: #17a2b8;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 5px;
+    transition: background-color 0.3s;
+}
+
+.update-button:hover {
+    background-color: #138496;
+}
+
+/* Task List Specific Styles */
+.task-form .form-control {
+    width: 100% !important;
+    padding: 0.375rem 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.task-form .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.task-form .select2-container {
+    width: 100% !important;
+}
+
+.task-form .progress-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.task-form .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.task-form .status-badge.pending {
+    background-color: #ffd700 !important;
+    color: #000 !important;
+}
+
+.task-form .status-badge.in-progress {
+    background-color: #4169e1 !important;
+    color: white !important;
+}
+
+.task-form .status-badge.completed {
+    background-color: #32cd32 !important;
+    color: white !important;
+}
+
+/* Task Status Styles (for use in task list and elsewhere) */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+.status-badge.pending {
+    background-color: #ffd700;
+    color: #000;
+}
+.status-badge.in-progress {
+    background-color: #4169e1;
+    color: white;
+}
+.status-badge.completed {
+    background-color: #32cd32;
+    color: white;
+}
+.progress-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Stylish student details update form */
+.card.shadow.mb-4 {
+    border-radius: 16px;
+    border: none;
+}
+.card-body {
+    padding: 2rem 2rem 1.5rem 2rem;
+}
+#updateForm .form-label {
+    font-weight: 600;
+    color: #1abc9c;
+}
+#updateForm .form-control, #updateForm .input-group-text {
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    background: #fff !important;
+    color: #222 !important;
+    border: 1px solid #1abc9c !important;
+    box-shadow: none !important;
+    padding: 0.375rem 0.75rem !important;
+    margin-bottom: 0 !important;
+}
+
+#updateForm .input-group {
+    width: 100% !important;
+    flex-wrap: nowrap !important;
+}
+
+#updateForm .input-group-text {
+    background: #eafaf7 !important;
+    color: #1abc9c !important;
+    border: 1px solid #1abc9c !important;
+    white-space: nowrap !important;
+    height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+#updateForm .btn-success {
+    padding: 0.75rem 2.5rem;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+#updateForm .fw-bold {
+    color: #222;
+    font-size: 1.15rem;
+}
+
+/* Consistent sizing for student info fields */
+#updateForm .form-control, #updateForm select {
+    width: 100%;
+    height: 38px;
+    box-sizing: border-box;
+}
+
+#updateForm .attendance-group {
+    width: 100%;
+}
+
+/* Prevent overflow in Bootstrap columns */
+.row > [class^='col-'] {
+    min-width: 0;
+}
+
+/* Ensure input-group-text stays inline and doesn't wrap */
+.input-group-text {
+    white-space: nowrap;
+}
+
+.attendance-input-wrapper {
+  position: relative;
+}
+.attendance-input {
+  padding-right: 2.2em !important;
+}
+.attendance-input-wrapper::after {
+  content: '%';
+  position: absolute;
+  right: 1em;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #1abc9c;
+  font-weight: bold;
+  pointer-events: none;
+}

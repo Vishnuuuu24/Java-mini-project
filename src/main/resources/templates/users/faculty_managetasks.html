@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Tasks</title>
+    <link rel="stylesheet" th:href="@{/css/faculty_styles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body>
+    <a th:href="@{/users/faculty/dashboard/}" class="back-btn">
+        <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </a>
+    <button id="darkModeToggle">Light Mode</button>
+    <section class="hero-section">
+        <div class="d-flex justify-content-end align-items-center">
+            <a th:href="@{/users/logout/}" class="logout-btn">
+                <i class="bi bi-box-arrow-right me-1"></i>Logout
+            </a>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-welcome">Manage Tasks</h1>
+        </div>
+    </section>
+
+    <div class="container content-section">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${success != null}">
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${error != null}">
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title"><i class="bi bi-list-task me-2"></i>Existing Tasks</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Due Date</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="task : ${tasks}">
+                                <td th:text="${task.title}"></td>
+                                <td th:text="${#temporals.format(task.dueDate, 'MMM dd, yyyy')}"></td>
+                                <td>
+                                    <span class="badge"
+                                          th:classappend="${task.priority != null and task.priority.value == 'High'} ? ' bg-danger' : (${task.priority != null and task.priority.value == 'Medium'} ? ' bg-warning' : ' bg-info')"
+                                          th:text="${task.priority != null ? task.priority.value : ''}">
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge"
+                                          th:classappend="${task.status != null and task.status.value == 'Completed'} ? ' bg-success' : (${task.status != null and task.status.value == 'In Progress'} ? ' bg-warning' : ' bg-secondary')"
+                                          th:text="${task.status != null ? task.status.value : ''}">
+                                    </span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-primary edit-task-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editTaskModal"
+                                            th:attr="data-task-id=${task.id},data-description=${task.description}">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" th:attr="onclick=|deleteTask('${task.id}')|">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(tasks)}">
+                                <td colspan="5" class="text-center">No tasks found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" th:action="@{/faculty/manage-tasks/}">
+                    <input type="hidden" name="csrfmiddlewaretoken" th:value="${_csrf.token}">
+                    <input type="hidden" name="task_id" id="edit_task_id">
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label for="edit_title">Title</label>
+                            <input type="text" class="form-control" id="edit_title" name="title" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="edit_description">Description</label>
+                            <textarea class="form-control" id="edit_description" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="edit_due_date">Due Date</label>
+                            <input type="date" class="form-control" id="edit_due_date" name="dueDate" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="edit_priority">Priority</label>
+                            <select class="form-control" id="edit_priority" name="priority">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="edit_assigned_to">Assign To</label>
+                            <div class="d-flex align-items-center mb-2">
+                                <button type="button" id="editSelectAllBtn" class="btn btn-sm btn-outline-secondary me-2">Select All</button>
+                                <button type="button" id="editClearAllBtn" class="btn btn-sm btn-outline-secondary">Clear All</button>
+                            </div>
+                            <select class="form-control select2" id="edit_assigned_to" name="assignedStudentIds" multiple required>
+                                <option th:each="student : ${students}" th:value="${student.id}" th:text="${student.firstName + ' ' + student.lastName}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="update_task" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/faculty_dashboard.js}"></script>
+    <script>
+    $(document).ready(function() {
+        $('#edit_assigned_to').select2({
+            dropdownParent: $('#editTaskModal'),
+            placeholder: 'Search and select students...',
+            width: '100%',
+            allowClear: true
+        });
+
+        $('#editSelectAllBtn').click(function() {
+            $('#edit_assigned_to option').prop('selected', true);
+            $('#edit_assigned_to').trigger('change');
+        });
+
+        $('#editClearAllBtn').click(function() {
+            $('#edit_assigned_to').val(null).trigger('change');
+        });
+
+        const editModal = new bootstrap.Modal(document.getElementById('editTaskModal'));
+
+        document.querySelectorAll('.edit-task-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const taskId = this.getAttribute('data-task-id');
+                const taskRow = this.closest('tr');
+
+                const title = taskRow.cells[0].textContent;
+                const dueDate = taskRow.cells[1].textContent;
+                const priority = taskRow.cells[2].querySelector('.badge').textContent.trim();
+                const description = this.getAttribute('data-description');
+
+                document.getElementById('edit_task_id').value = taskId;
+                document.getElementById('edit_title').value = title;
+                document.getElementById('edit_due_date').value = formatDate(dueDate);
+                document.getElementById('edit_priority').value = priority;
+                document.getElementById('edit_description').value = description;
+
+                $('#edit_assigned_to').val(null).trigger('change');
+                editModal.show();
+            });
+        });
+    });
+
+    function formatDate(dateStr) {
+        const months = {
+            'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+            'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+            'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+        };
+        const [month, day, year] = dateStr.split(' ');
+        return `${year}-${months[month]}-${day}`;
+    }
+
+    function deleteTask(taskId) {
+        if (confirm('Are you sure you want to delete this task?')) {
+            fetch(`/faculty/manage-tasks/${taskId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error deleting task: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the task.');
+            });
+        }
+    }
+    </script>
+</body>
+</html>

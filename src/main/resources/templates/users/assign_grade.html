@@ -1,0 +1,37 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0">Assign Grade</h4>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <h5>Student: <span th:text="${student.user.firstName + ' ' + student.user.lastName}"></span></h5>
+                <p class="text-muted">ID: <span th:text="${student.registerNo}"></span></p>
+            </div>
+            <div class="mb-3">
+                <h5>Course: <span th:text="${course.name}"></span></h5>
+                <p class="text-muted">Code: <span th:text="${course.code}"></span></p>
+            </div>
+
+            <form method="POST" th:object="${assignGradeForm}">
+                <input type="hidden" name="csrfmiddlewaretoken" th:value="${_csrf.token}">
+                <div class="mb-3">
+                    <label for="grade">Grade</label>
+                    <select id="grade" class="form-select" th:field="*{grade}">
+                        <option value="">Select Grade</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="F">F</option>
+                    </select>
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('grade')}" th:errors="*{grade}"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/users/faculty/courses/{courseId}/grades/(courseId=${course.id})}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Save Grade</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Courses</title>
+    <link rel="stylesheet" th:href="@{/css/admin_styles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a th:href="@{/users/admin/dashboard/}" class="navbar-brand">Student Management System</a>
+            <div class="navbar-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="navbar-menu">
+                <a th:href="@{/users/admin/dashboard/}">Dashboard</a>
+                <a th:href="@{/students/}">Students</a>
+                <a th:href="@{/faculty/faculty_list/}">Faculty</a>
+                <a th:href="@{/courses/}" class="active">Courses</a>
+                <a th:href="@{/tasks/}">Tasks</a>
+            </div>
+            <div class="user-info">
+                <a th:href="@{/users/logout/}" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <ul class="messages" th:if="${success != null or error != null}">
+        <li class="success" th:if="${success != null}" th:text="${success}"></li>
+        <li class="error" th:if="${error != null}" th:text="${error}"></li>
+    </ul>
+
+    <h1>Course Management</h1>
+
+    <div class="course-creation-form">
+        <h2>Create New Course</h2>
+        <form method="POST" th:action="@{/courses/}" th:object="${course_form}">
+            <input type="hidden" name="csrfmiddlewaretoken" th:value="${_csrf.token}">
+
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="id_name">Name:</label>
+                <input type="text" id="id_name" th:field="*{name}">
+                <div th:errors="*{name}"></div>
+            </div>
+            <div class="form-group">
+                <label for="id_code">Code:</label>
+                <input type="text" id="id_code" th:field="*{code}">
+                <div th:errors="*{code}"></div>
+            </div>
+            <div class="form-group">
+                <label for="id_level">Level:</label>
+                <select id="id_level" th:field="*{level}">
+                    <option value="">---------</option>
+                    <option value="UG">Undergraduate(UG)</option>
+                    <option value="PG">Postgraduate(PG)</option>
+                </select>
+                <div th:errors="*{level}"></div>
+            </div>
+            <div class="form-group">
+                <label for="id_faculty">Faculty:</label>
+                <select id="id_faculty" class="select2" th:field="*{facultyUserIds}" multiple>
+                    <option th:if="${faculty_users == null or #lists.isEmpty(faculty_users)}" value="">No faculty available</option>
+                    <option th:each="facultyUser : ${faculty_users}" th:value="${facultyUser.id}" th:text="${facultyUser.firstName + ' ' + facultyUser.lastName}"></option>
+                </select>
+                <div th:errors="*{facultyUserIds}"></div>
+            </div>
+            <button type="submit" name="create_course">Create Course</button>
+        </form>
+    </div>
+
+    <div class="search-container">
+        <h2>Existing Courses</h2>
+        <form method="GET" th:action="@{/courses/}" class="search-form">
+            <input type="text" name="q" placeholder="Search courses by name or code..." th:value="${q}" class="search-input">
+            <button type="submit" class="search-button">Search</button>
+            <a th:if="${q != null and !#strings.isEmpty(q)}" th:href="@{/courses/}" class="clear-search">Clear Search</a>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>Course Name</th>
+            <th>Course Code</th>
+            <th>Level</th>
+            <th>Action</th>
+        </tr>
+        <tr th:each="course : ${courses}">
+            <td>
+                <input type="text" name="name" th:value="${course.name}" class="editable-field" th:attr="data-course-id=${course.id}" data-field="name">
+            </td>
+            <td>
+                <input type="text" name="code" th:value="${course.code}" class="editable-field" th:attr="data-course-id=${course.id}" data-field="code">
+            </td>
+            <td>
+                <select name="level" class="editable-field" th:attr="data-course-id=${course.id}" data-field="level">
+                    <option value="UG" th:selected="${course.level != null and course.level.value == 'UG'}">Undergraduate(UG)</option>
+                    <option value="PG" th:selected="${course.level != null and course.level.value == 'PG'}">Postgraduate(PG)</option>
+                </select>
+            </td>
+            <td>
+                <button type="button" class="update-button" th:attr="data-course-id=${course.id}">Update</button>
+                <button type="button" class="delete-button" th:attr="data-course-id=${course.id}">Delete</button>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(courses)}"><td colspan="4">No courses found.</td></tr>
+    </table>
+
+    <div class="view-more-container" th:if="${(show_all == null or #strings.isEmpty(show_all)) and (q == null or #strings.isEmpty(q)) and has_more}">
+        <a th:href="@{/courses/(show_all=1)}" class="view-more-button">Show All Courses</a>
+    </div>
+
+    <div class="back-link-container">
+        <a th:href="@{/users/admin/dashboard/}" class="back-link">← Back to admin dashboard</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:src="@{/js/delete_manage.js}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Search and select faculty...",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Handle update button clicks
+            $('.update-button').click(function() {
+                const courseId = $(this).data('course-id');
+                const row = $(this).closest('tr');
+                const data = {
+                    name: row.find('[data-field="name"]').val(),
+                    code: row.find('[data-field="code"]').val(),
+                    level: row.find('[data-field="level"]').val(),
+                };
+
+                $.ajax({
+                    url: `/courses/${courseId}/update/`,
+                    type: 'POST',
+                    data: data,
+                    headers: {
+                        'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            location.reload();
+                        } else {
+                            alert(response.error || 'Error updating course');
+                        }
+                    },
+                    error: function() {
+                        alert('Error updating course');
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        function toggleMenu() {
+            const menu = document.querySelector('.navbar-menu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

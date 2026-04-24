@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Faculty List</title>
+    <link rel="stylesheet" th:href="@{/css/admin_styles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:src="@{/js/faculty_list.js}"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a th:href="@{/users/admin/dashboard/}" class="navbar-brand">Student Management System</a>
+            <div class="navbar-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="navbar-menu">
+                <a th:href="@{/users/admin/dashboard/}">Dashboard</a>
+                <a th:href="@{/students/}">Students</a>
+                <a th:href="@{/faculty/faculty_list/}" class="active">Faculty</a>
+                <a th:href="@{/courses/}">Courses</a>
+                <a th:href="@{/tasks/}">Tasks</a>
+            </div>
+            <div class="user-info">
+                <a th:href="@{/users/logout/}" class="logout-btn">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <ul class="messages" th:if="${success != null or error != null}">
+        <li class="success" th:if="${success != null}" th:text="${success}"></li>
+        <li class="error" th:if="${error != null}" th:text="${error}"></li>
+    </ul>
+
+    <h1>Faculty List</h1>
+
+    <form method="GET" th:action="@{/faculty/faculty_list/}">
+        <input type="text" name="q" placeholder="Search faculty..." th:value="${q}">
+        <button type="submit">Search</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Faculty ID</th>
+            <th>Department</th>
+            <th>Designation</th>
+            <th>Action</th>
+        </tr>
+        <tr th:each="faculty : ${faculties}">
+            <td th:text="|${faculty.user.firstName} ${faculty.user.lastName}|"></td>
+            <td th:text="${faculty.facultyId}"></td>
+            <td th:text="${faculty.department}"></td>
+            <td th:text="${faculty.designation}"></td>
+            <td>
+                <a th:href="@{/faculty/{facultyId}/manage/(facultyId=${faculty.id})}">
+                    Manage
+                </a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(faculties)}"><td colspan="5">No faculty found.</td></tr>
+    </table>
+
+    <div class="creation-form">
+        <h2>Create New Faculty</h2>
+        <form method="POST" th:action="@{/faculty/faculty_list/}" th:object="${faculty_form}">
+            <input type="hidden" name="csrfmiddlewaretoken" th:value="${_csrf.token}">
+
+            <div th:if="${#fields.hasGlobalErrors()}">
+                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+            </div>
+
+            <p>
+                <label for="id_user">User:</label>
+                <select id="id_user" th:field="*{userId}">
+                    <option value="">---------</option>
+                    <option th:each="user : ${@customUserRepository.findByRole(T(com.example.stmgt.domain.enums.UserRole).FACULTY)}"
+                            th:value="${user.id}"
+                            th:text="|${user.username} (${user.firstName} ${user.lastName})|"></option>
+                </select>
+            </p>
+
+            <p>
+                <label for="id_faculty_id">Faculty ID:</label>
+                <input type="number" id="id_faculty_id" th:field="*{facultyId}">
+            </p>
+
+            <p>
+                <label for="id_department">Department:</label>
+                <input type="text" id="id_department" th:field="*{department}">
+            </p>
+
+            <p>
+                <label for="id_designation">Designation:</label>
+                <input type="text" id="id_designation" th:field="*{designation}">
+            </p>
+
+            <p>
+                <label for="id_email">Email:</label>
+                <input type="email" id="id_email" th:field="*{email}">
+            </p>
+
+            <p>
+                <label for="id_phone">Phone:</label>
+                <input type="text" id="id_phone" th:field="*{phone}">
+            </p>
+
+            <p>
+                <label for="id_courses">Courses:</label>
+                <select id="id_courses" th:field="*{courseIds}" multiple>
+                    <option th:each="course : ${@courseRepository.findAll()}"
+                            th:value="${course.id}"
+                            th:text="|${course.name} (${course.code})|"></option>
+                </select>
+            </p>
+
+            <button type="submit" name="create_faculty">Create Faculty</button>
+        </form>
+    </div>
+
+    <div class="back-link-container">
+        <a th:href="@{/users/admin/dashboard/}" class="back-link">← Back to Admin Dashboard</a>
+    </div>
+</body>
+</html>

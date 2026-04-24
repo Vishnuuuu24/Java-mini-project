@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Maven/Java build output
+target/
+
+# Logs
+*.log
+
+# IDE files
+.idea/
+*.iml
+
+# VS Code local workspace settings
+.vscode/
+
+# Temporary files
+*.tmp
+*.swp
